@@ -37,7 +37,6 @@ public class UserService {
             return null;
         }
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
-
         // Parse the amount from the request
         double amount = Double.parseDouble(request.getTransactionAmount().getAmount());
         ResponseCode status;
@@ -78,7 +77,6 @@ public class UserService {
         // Check if the user has sufficient funds
         if (user.getBalance() < amount) {
             status = ResponseCode.DECLIEND;
-//            throw new RuntimeException("Insufficient funds");
         } else {
             status = ResponseCode.APPROVED;
         }

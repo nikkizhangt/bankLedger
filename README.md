@@ -42,17 +42,66 @@ Here’s a breakdown of the key criteria we’ll be considering when grading you
 **Documentation and Clarity:** We’ll assess the clarity of your documentation, including comments within the code, README files, architectural diagrams, and explanations of design decisions. Your documentation should provide sufficient context for reviewers to understand the problem, solution, and implementation details.
 
 # Candidate README
+## Project Structure
+```
+Structure: dev.codescreen
+    ├── Application.java
+    ├── Controller
+    │   └── UserController.java
+    ├── Service
+    │   └── UserService.java
+    ├── Repository
+    │   ├── UserRepository.java
+    │   └── TransactionRepository.java
+    └── Entity
+        ├── Amount.java
+        ├── AuthorizationRequest.java
+        ├── AuthoriizationResponse.java
+        ├── DebitCredit.java
+        ├── Error.java
+        ├── LoadRequest.java
+        ├── LoadResponse.java
+        ├── Ping.java
+        ├── ResponseCode.java
+        ├── Transaction.java
+        └── User.java
+Structure: resources
+    └── application.properties
+```
 ## Bootstrap instructions
-*Replace this: To run this server locally, do the following:*
+To run this server locally, do the following:
+1. Clone the repository to your local machine using `git clone <repository-url>`.
+2. Navigate to the project directory using `cd <directory-name>`.
+3. If you are using Maven, you can compile and run the application using the following commands: 
+    ```bash
+    mvn clean install
+    mvn spring-boot:run
+    ```
+4. The application will start running at `http://localhost:8080`.
+5. You can test the endpoints using any HTTP client like curl or Postman. Here's an example of how to use curl to test the endpoints:
+    ```bash
+    curl http://localhost:8080/ping
+    ```
 
-## Design considerations
-*Replace this: I decided to build X for Y reasons.*
+## Testing
+Unit and integration tests are included in the project. To run the tests, use the following command:
+    ```bash
+    mvn test
+    ```
+## Database Setup
+To successfully run the code, it is necessary to set up a database yourself. I have attached my PostgreSQL configuration for reference.
+
+## Design Considerations
+1. I decided to use a permanent SQL database for storing User information and transaction information, as the banking system needs to strictly follow ACID principles. This ensures data consistency and reliability, which are crucial in a banking system.
+2. I decided to use a temporary data storing method for `messageId` because I need to ensure uniqueness of `messageId` for a short period of time. This is to prevent processing the same request multiple times.
+3. I used UUID for storing transaction information, as I stick to the form in the provided `service.yml` file. UUID provides a fast and easy way to generate unique identifiers, which is essential for tracking each transaction.
 
 ## Assumptions
-*Replace this: If you made any assumption in designing the service, document it here*
+1. Because `LoadRequest` and `AuthorizationRequest` already include a `messageId` attribute, it's reasonable to assume that the `messageId` is being generated on the client side before the request is sent to the service. This is to ensure that each request is unique and can be tracked individually.
+2. I assume that a User has been created and both PUT endpoints should not create a new User. When using the `findById` method, we search for an existing user, and if the user is not found, an error is thrown. This is to ensure that transactions are only made for existing users.
 
-## Bonus: Deployment considerations
-*Replace this: If I were to deploy this, I would host it in this way with these technologies.*
+## Deployment Considerations
+If I were to deploy this, I would host it on a cloud platform like AWS or Google Cloud Platform. These platforms provide scalable and reliable hosting services, which are essential for a banking system that needs to handle a large number of transactions. I would use Docker for containerization to ensure that the application runs consistently across different environments. For continuous integration and deployment, I would use a service like Jenkins or Travis CI. This would automate the testing and deployment process, ensuring that any changes to the code are immediately tested and deployed to the production environment.
 
 ## License
 
